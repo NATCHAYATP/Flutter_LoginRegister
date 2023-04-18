@@ -13,16 +13,16 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final formKey = GlobalKey<FormState>();
-  Profile profile = Profile();
-  final Future<FirebaseApp> firebase = Firebase.initializeApp();
+  final formKey = GlobalKey<FormState>(); //ไว้เช็คสถานะว่าเป็น รีเซ็ทฟอร์ม เซฟฟอร์ม 
+  Profile profile = Profile(); //จะเก็บค่าลงตัวแปรที่เราสร้างไว้ในไฟล์ profile.dart ก็เลยประกาศออปเจคไว้
+  final Future<FirebaseApp> firebase = Firebase.initializeApp(); //เรียกใช้ไฟเบส ต้องติดตังไฟเบสคอลใน .yaml ด้วย
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
         future: firebase,
         builder: (context, snapshot) {
-          if(snapshot.hasError){
+          if(snapshot.hasError){ //เชคว่ามันมีเออเร่อรึป่าว 
             return Scaffold(
                 appBar: AppBar(
                   title: Text("Error"),
@@ -31,7 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
             );
           }
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.done) { //กรณีัไม่เออเร่อจะแสดงอันนี้
             return Scaffold(
               appBar: AppBar(
                 title: Text("สร้างบัญชีผู้ใช้"),
@@ -47,12 +47,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         children: [
                           Text("อีเมล", style: TextStyle(fontSize: 20)),
                           TextFormField(
-                            validator: MultiValidator([
+                            validator: MultiValidator([ //validate ได้หลายเงื่อนไข
                               RequiredValidator(errorText: "กรุณาป้อนอีเมลด้วยครับ"),
                               EmailValidator(errorText: "รูปแบบอีเมลไม่ถูกต้อง")
                             ]),
-                            keyboardType: TextInputType.emailAddress,
-                            onSaved: (String email) {
+                            keyboardType: TextInputType.emailAddress, //กรอกรูปแบบอีเมล
+                            onSaved: (String email) { //บันทึกข้อมูลลงตัวแปร
                               profile.email = email;
                             },
                           ),
@@ -61,8 +61,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           Text("รหัสผ่าน", style: TextStyle(fontSize: 20)),
                           TextFormField(
-                            validator: RequiredValidator(errorText: "กรุณาป้อนรหัสผ่านด้วยครับ"),
-                              obscureText: true,
+                            validator: RequiredValidator(errorText: "กรุณาป้อนรหัสผ่านด้วยครับ"), //ห้ามว่าง
+                              obscureText: true, //ซ่อนรหัสผ่าน ให้มองเป็นจุดๆ
                               onSaved: (String password) {
                               profile.password = password;
                             },
@@ -71,20 +71,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             width: double.infinity,
                             child: ElevatedButton(
                               child: Text("ลงทะเบียน",style: TextStyle(fontSize: 20)),
-                              onPressed: () async{
-                                if (formKey.currentState.validate()) {
-                                  formKey.currentState.save();
-                                  try{
-                                    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                                      email: profile.email, 
+                              onPressed: () async{ //ใส่เพื่อรอ ตรง await
+                                if (formKey.currentState.validate()) { //ถ้า validate ผ่านจะทำงาน
+                                  formKey.currentState.save(); // ทำให้มันเรียกใช้งาน onSaved ของ textfield
+                                  try{ // try ใส่ที่เราจะทำส่วน catch เอาไวกรณีมีเออเร่อ
+                                    await FirebaseAuth.instance.createUserWithEmailAndPassword( //สร้างบัญชีผู้ใช้ await เอามาเพื่อให้มันรอใส่เมลกับรหัสก่อน ใส่ async ด้วย
+                                      email: profile.email, //เรียกเอาจากที่เก็บมาใส่
                                       password: profile.password
-                                    ).then((value){
-                                      formKey.currentState.reset();
-                                      Fluttertoast.showToast(
+                                    ).then((value){ // คือต้องทำด้านบนให้ได้ก่อน พวกด้านล่างถึงตามมา 
+                                      formKey.currentState.reset(); //ให้ formKey เป็นค่าว่าง 
+                                      Fluttertoast.showToast(  //toast ไว้แสดงข้อความเออเร่อ
                                         msg: "สร้างบัญชีผู้ใช้เรียบร้อยแล้ว",
-                                        gravity: ToastGravity.TOP
+                                        gravity: ToastGravity.TOP //ตำแหน่งที่จะให้แสดง
                                       );
-                                      Navigator.pushReplacement(context,
+                                      Navigator.pushReplacement(context,  //ให้กลับไปหน้าแรก
                                       MaterialPageRoute(builder: (context){
                                           return HomeScreen();
                                       }));

@@ -7,24 +7,27 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Register/Login"),
+        title: Text(
+          "Register/Login",
+        ),
       ),
+
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
+        padding: const EdgeInsets.fromLTRB(10, 50, 10, 0), //กำหนดขอบซ้ายขวาบนล่าง
         child: SingleChildScrollView(
           child: Column(
             children: [
               Image.asset("assets/images/logo.png"),
-              SizedBox(
+              SizedBox( //ใช้ทำปุ่ม
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   icon: Icon(Icons.add),
                   label:
                       Text("สร้างบัญชีผู้ใช้", style: TextStyle(fontSize: 20)),
                       onPressed: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(
+                      Navigator.pushReplacement(context, MaterialPageRoute( //กดแล้วพาไปหน้าอื่น ถ้าเป็น push เฉยๆมันจะซ้ำหน้าเดิม
                         builder: (context){
-                          return RegisterScreen();
+                          return RegisterScreen(); //หน้าที่จะให้พาไปเมื่อกด
                       })
                     );
                   },

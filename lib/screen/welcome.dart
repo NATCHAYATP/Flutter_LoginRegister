@@ -6,7 +6,7 @@ import 'home.dart';
 
 class WelcomeScreen extends StatelessWidget {
 
-  final auth = FirebaseAuth.instance;
+  final auth = FirebaseAuth.instance; //เอาข้อมุลจากไฟเบสเข้ามา เพราะเราต้องการข้อมุลในนั้น
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class WelcomeScreen extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-                Text(auth.currentUser.email,style: TextStyle(fontSize: 25),),
+                Text(auth.currentUser.email,style: TextStyle(fontSize: 25),), //เอาข้อมูลอีเมลมาจากตรงนี้
                 ElevatedButton(
                   child: Text("ออกจากระบบ"),
                   onPressed: (){
