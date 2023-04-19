@@ -37,6 +37,17 @@ class _LoginScreenState extends State<LoginScreen> {
             return Scaffold(
               appBar: AppBar(
                 title: Text("เข้าสู่ระบบ"),
+                actions: <Widget>[
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return HomeScreen();
+                      }));
+                    },
+                    icon: Icon(Icons.home),
+                  )
+                ],
               ),
               body: Container(
                 child: Padding(
